@@ -1,0 +1,75 @@
+{% extends 'blog/main.html' %}
+{% block main_section %}
+    <h2>Все статьи от автора {{ view.kwargs.username }}</h2>
+    <h4>Количество: {{ page_obj.paginator.count }}</h4>
+    {% for post in news %}
+        <div class="alert alert-light text-dark">
+            <h1>{{ post.title }}</h1>
+            <p>{{ post.text|striptags|truncatechars:200 }}</p>
+            <div class="row">
+                <div>
+                    {% if post.author.profile.img %}
+                        <img src="{{ post.author.profile.img.url }}" alt="{{ post.author }}" class="user_image">
+                    {% else %}
+                        <img src="/media/default.jpg" alt="{{ post.author }}" class="user_image">
+                    {% endif %}
+                </div>
+                <div class="mt-2">
+                    <span class="text-muted">{{ post.date|date:"j N Y H:i:s" }}</span>
+                    <p><b>Author:</b>
+                        <a href="{% url 'user-news' post.author %}">{{ post.author }}</a>
+                    </p>
+                </div>
+            </div>
+            <a href="{% url 'news-detail' post.id %}" class="btn btn-outline-dark btn-block">read more</a>
+        </div>
+    {% endfor %}
+
+    {% if is_paginated %}
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="btn btn-outline-dark">Начало</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-dark">Предыдущая</a>
+        {% endif %}
+
+        <!-- Начало Предыдущая 2 3 4 5 6 Следующая Последняя  -->
+        {% for num in page_obj.paginator.page_range %}
+            {% if num == page_obj.number %}
+                <button class="btn btn-dark">{{ num }}</button>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}" class="btn btn-outline-dark">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-dark">Следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-dark">Последняя</a>
+        {% endif %}
+    {% endif %}
+{% endblock main_section %}
+
+
+
+{% block test_news_section %}
+    <h3><b>Data science</b></h3>
+    <p>Data science is an interdisciplinary field that uses scientific methods, processes, algorithms
+        and systems to extract knowledge and insights from data in various forms, both structured and
+        unstructured, similar to data mining.</p>
+    <img src="https://cdn1.savepice.ru/uploads/2019/1/16/a8819f8d98bfeb479ae544939238fcf6-full.png"
+         class="img-thumbnail mb-3">
+    <a href="https://en.wikipedia.org/wiki/Data_science" class="btn btn-outline-light btn-block"
+       role="button" aria-disabled="true">View</a>
+{% endblock test_news_section %}
+
+
+{% block aside_news_section %}
+    <h3><b>Machine learning</b></h3>
+    <p>Machine learning (ML) is the scientific study of algorithms and statistical models that computer
+        systems use to progressively improve their performance on a specific task. Machine learning
+        algorithms build a mathematical model of sample data, known as "training data", in order to make
+        predictions or decisions without being explicitly programmed to perform the task.</p>
+    <img src="https://cdn1.savepice.ru/uploads/2019/1/16/07f82e25174f05087fdaf67509c2b8c4-full.png"
+         class="img-thumbnail mb-3">
+    <a href="https://en.wikipedia.org/wiki/Machine_learning" class="btn btn-outline-light btn-block"
+       role="button" aria-disabled="true">View</a>
+{% endblock aside_news_section %}
+

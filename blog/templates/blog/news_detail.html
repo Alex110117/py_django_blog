@@ -1,0 +1,54 @@
+{% extends 'blog/main.html' %}
+{% block main_section %}
+    <div class="alert alert-light text-dark">
+        <a href="{% url 'blog-home' %}">Вернуться назад</a></a>
+        <h1>{{ object.title }}</h1>
+        <p>{{ object.text|safe }}</p>
+        <div class="row">
+            <div>
+                {% if object.author.profile.img %}
+                    <img src="{{ object.author.profile.img.url }}" alt="{{ object.author }}" class="user_image">
+                {% else %}
+                    <img src="/media/default.jpg" alt="{{ object.author }}" class="user_image">
+                {% endif %}
+            </div>
+            <div class="mt-2">
+                <span class="text-muted">{{ object.date|date:"j N Y H:i:s" }}</span>
+                <p><b>Author:</b>
+                    <a href="{% url 'user-news' object.author %}">{{ object.author }}</a>
+                </p>
+            </div>
+        </div>
+        {% if object.author == user %}
+            <hr>
+            <a href="{% url 'news-update' object.id %}" class="btn btn-outline-warning">Обновить пост</a>
+            <a href="{% url 'news-delete' object.id %}" class="btn btn-outline-danger">Удалить пост</a>
+        {% endif %}
+    </div>
+{% endblock main_section %}
+
+
+{% block test_news_section %}
+    <h3><b>Data science</b></h3>
+    <p>Data science is an interdisciplinary field that uses scientific methods, processes, algorithms
+        and systems to extract knowledge and insights from data in various forms, both structured and
+        unstructured, similar to data mining.</p>
+    <img src="https://cdn1.savepice.ru/uploads/2019/1/16/a8819f8d98bfeb479ae544939238fcf6-full.png"
+         class="img-thumbnail mb-3">
+    <a href="https://en.wikipedia.org/wiki/Data_science" class="btn btn-outline-light btn-block"
+       role="button" aria-disabled="true">View</a>
+{% endblock test_news_section %}
+
+
+{% block aside_news_section %}
+    <h3><b>Machine learning</b></h3>
+    <p>Machine learning (ML) is the scientific study of algorithms and statistical models that computer
+        systems use to progressively improve their performance on a specific task. Machine learning
+        algorithms build a mathematical model of sample data, known as "training data", in order to make
+        predictions or decisions without being explicitly programmed to perform the task.</p>
+    <img src="https://cdn1.savepice.ru/uploads/2019/1/16/07f82e25174f05087fdaf67509c2b8c4-full.png"
+         class="img-thumbnail mb-3">
+    <a href="https://en.wikipedia.org/wiki/Machine_learning" class="btn btn-outline-light btn-block"
+       role="button" aria-disabled="true">View</a>
+{% endblock aside_news_section %}
+
